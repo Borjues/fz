@@ -72,6 +72,27 @@ async function checkEmail(email) {
   return users;
 }
 
+async function validatePassword(userId, old_password) {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new Error('User tidak ditemukan');
+  }
+  console.log(old_password);
+  const match = await passwordMatched(old_password, user.password);
+  return match;
+}
+
+async function updatePassword(userId, new_Password) {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error('User tidak ditemukan');
+  }
+  user.password = new_Password;
+  await user.save();
+}
+
+
 module.exports = {
   getUsers,
   getUser,
@@ -79,4 +100,6 @@ module.exports = {
   updateUser,
   deleteUser,
   checkEmail,
+  validatePassword,
+  updatePassword,
 };
